@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
+using System.Text.Json;
 using System.Web;
 
 namespace bybit.net.api
@@ -57,7 +57,7 @@ namespace bybit.net.api
                 }
                 else if (httpMethod == HttpMethod.Post)
                 {
-                    content = JsonConvert.SerializeObject(query);
+                    content = JsonSerializer.Serialize(query);
                 }
             }
             return await SendAsync<T>(requestUri, httpMethod, null, content);
@@ -89,7 +89,7 @@ namespace bybit.net.api
             }
             else if (httpMethod == HttpMethod.Post)
             {
-                content = JsonConvert.SerializeObject(query);
+                content = JsonSerializer.Serialize(query);
                 signature = bybitSignatureService.GeneratePostSignature(query ?? new Dictionary<string, object>());
             }
 
@@ -165,9 +165,9 @@ namespace bybit.net.api
                 {
                     try
                     {
-                        return JsonConvert.DeserializeObject<T>(contentString);
+                        return JsonSerializer.Deserialize<T>(contentString);
                     }
-                    catch (JsonReaderException ex)
+                    catch (JsonException ex)
                     {
                         var clientException = new BybitClientException($"Failed to map server response from '{requestUri}' to given type", -1, ex)
                         {
@@ -187,9 +187,9 @@ namespace bybit.net.api
                 {
                     try
                     {
-                        httpException = JsonConvert.DeserializeObject<BybitClientException>(contentString);
+                        httpException = JsonSerializer.Deserialize<BybitHttpException>(contentString);
                     }
-                    catch (JsonReaderException ex)
+                    catch (JsonException ex)
                     {
                         httpException = new BybitClientException(contentString, -1, ex);
                     }

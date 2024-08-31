@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace bybit.net.api.Models.Market
 {
     public class MarketKLineResult
     {
-        [JsonProperty("category")]
+        [JsonPropertyName("category")]
         public String? Category { get; set; }
 
-        [JsonProperty("symbol")]
+        [JsonPropertyName("symbol")]
         public String? Symbol { get; set; }
 
-        [JsonProperty("list")]
+        [JsonPropertyName("list")]
         public List<List<string>>? MarketKlineEntries { get; set; }
     }
 }

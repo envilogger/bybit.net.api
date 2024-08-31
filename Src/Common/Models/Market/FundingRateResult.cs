@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace bybit.net.api.Models.Market
 {
     public class FundingRateResult
     {
-        [JsonProperty("category")]
+        [JsonPropertyName("category")]
         public String? Category { get; set; }
 
-        [JsonProperty("list")]
+        [JsonPropertyName("list")]
         public List<FundingRateEntry>? FundingRateEntries { get; set; }
     }
 }

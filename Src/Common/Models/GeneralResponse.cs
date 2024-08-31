@@ -1,22 +1,22 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace bybit.net.api.Models
 {
     public class GeneralResponse<T>
     {
-        [JsonProperty("retCode")]
+        [JsonPropertyName("retCode")]
         public int? RetCode { get; set; }
 
-        [JsonProperty("retMsg")]
+        [JsonPropertyName("retMsg")]
         public string? RetMsg { get; set; }
 
-        [JsonProperty("result")]
+        [JsonPropertyName("result")]
         public T? Result { get; set; }
 
-        [JsonProperty("retExtInfo")]
+        [JsonPropertyName("retExtInfo")]
         public Dictionary<string, object>? RetExtInfo { get; set; }
 
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public long? Time { get; set; }
     }
 }

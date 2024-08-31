@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.WebSockets;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace bybit.net.api.Websockets
@@ -203,7 +203,7 @@ namespace bybit.net.api.Websockets
             string signature = BitConverter.ToString(hash).Replace("-", "").ToLower();
 
             var authMessage = new { req_id = BybitParametersUtils.GenerateTransferId(), op = "auth", args = new object[] { key, expires, signature } };
-            string authMessageJson = JsonConvert.SerializeObject(authMessage);
+            string authMessageJson = JsonSerializer.Serialize(authMessage);
             await Console.Out.WriteLineAsync(authMessageJson);
             await SendAsync(authMessageJson, CancellationToken.None);
         }
@@ -217,7 +217,7 @@ namespace bybit.net.api.Websockets
         {
             BybitParametersUtils.EnsureNoDuplicates(args);
             var subMessage = new { req_id = Guid.NewGuid().ToString(), op = "subscribe", args = args };
-            string subMessageJson = JsonConvert.SerializeObject(subMessage);
+            string subMessageJson = JsonSerializer.Serialize(subMessage);
             await Console.Out.WriteLineAsync($"send subscription {subMessageJson}");
             await SendAsync(subMessageJson, CancellationToken.None);
         }

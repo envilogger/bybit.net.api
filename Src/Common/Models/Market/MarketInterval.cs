@@ -23,5 +23,4 @@
         public override readonly string ToString() => Value;
         public static implicit operator string(MarketInterval interval) => interval.Value;
     }
-
 }

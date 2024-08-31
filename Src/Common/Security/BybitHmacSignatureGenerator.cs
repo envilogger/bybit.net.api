@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 namespace bybit.net.api
 {
@@ -27,7 +27,7 @@ namespace bybit.net.api
         /// <returns>signature</returns>
         public string GeneratePostSignature(IDictionary<string, object> parameters)
         {
-            string paramJson = JsonConvert.SerializeObject(parameters);
+            string paramJson = JsonSerializer.Serialize(parameters);
             string rawData = currentTimeStamp + apikey + recWindow + paramJson;
             return Sign(rawData);
         }

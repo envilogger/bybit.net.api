@@ -1,4 +1,6 @@
-﻿namespace bybit.net.api
+﻿using System.Text.Json.Serialization;
+
+namespace bybit.net.api
 {
     public class BybitClientException : BybitHttpException
     {
@@ -22,10 +24,10 @@
             Message = message;
         }
 
-        [Newtonsoft.Json.JsonProperty("retCode")]
+        [JsonPropertyName("retCode")]
         public int Code { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("retMsg")]
+        [JsonPropertyName("retMsg")]
         public new string Message { get; protected set; }
     }
 }

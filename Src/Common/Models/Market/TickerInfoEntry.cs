@@ -1,79 +1,79 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace bybit.net.api.Models.Market
 {
     public class TickerInfoEntry
     {
-        [JsonProperty("symbol")]
+        [JsonPropertyName("symbol")]
         public string? Symbol { get; set; }
 
-        [JsonProperty("lastPrice")]
+        [JsonPropertyName("lastPrice")]
         public string? LastPrice { get; set; }
 
-        [JsonProperty("indexPrice")]
+        [JsonPropertyName("indexPrice")]
         public string? IndexPrice { get; set; }
 
-        [JsonProperty("markPrice")]
+        [JsonPropertyName("markPrice")]
         public string? MarkPrice { get; set; }
 
-        [JsonProperty("prevPrice24h")]
+        [JsonPropertyName("prevPrice24h")]
         public string? PrevPrice24h { get; set; }
 
-        [JsonProperty("price24hPcnt")]
+        [JsonPropertyName("price24hPcnt")]
         public string? Price24hPcnt { get; set; }
 
-        [JsonProperty("highPrice24h")]
+        [JsonPropertyName("highPrice24h")]
         public string? HighPrice24h { get; set; }
 
-        [JsonProperty("lowPrice24h")]
+        [JsonPropertyName("lowPrice24h")]
         public string? LowPrice24h { get; set; }
 
-        [JsonProperty("prevPrice1h")]
+        [JsonPropertyName("prevPrice1h")]
         public string? PrevPrice1h { get; set; }
 
-        [JsonProperty("openInterest")]
+        [JsonPropertyName("openInterest")]
         public string? OpenInterest { get; set; }
 
-        [JsonProperty("openInterestValue")]
+        [JsonPropertyName("openInterestValue")]
         public string? OpenInterestValue { get; set; }
 
-        [JsonProperty("turnover24h")]
+        [JsonPropertyName("turnover24h")]
         public string? Turnover24h { get; set; }
 
-        [JsonProperty("volume24h")]
+        [JsonPropertyName("volume24h")]
         public string? Volume24h { get; set; }
 
-        [JsonProperty("fundingRate")]
+        [JsonPropertyName("fundingRate")]
         public string? FundingRate { get; set; }
 
-        [JsonProperty("nextFundingTime")]
+        [JsonPropertyName("nextFundingTime")]
         public string? NextFundingTime { get; set; }
 
-        [JsonProperty("predictedDeliveryPrice")]
+        [JsonPropertyName("predictedDeliveryPrice")]
         public string? PredictedDeliveryPrice { get; set; }
 
-        [JsonProperty("basisRate")]
+        [JsonPropertyName("basisRate")]
         public string? BasisRate { get; set; }
 
-        [JsonProperty("basis")]
+        [JsonPropertyName("basis")]
         public string? Basis { get; set; }
 
-        [JsonProperty("deliveryFeeRate")]
+        [JsonPropertyName("deliveryFeeRate")]
         public string? DeliveryFeeRate { get; set; }
 
-        [JsonProperty("deliveryTime")]
+        [JsonPropertyName("deliveryTime")]
         public string? DeliveryTime { get; set; }
 
-        [JsonProperty("ask1Size")]
+        [JsonPropertyName("ask1Size")]
         public string? Ask1Size { get; set; }
 
-        [JsonProperty("bid1Price")]
+        [JsonPropertyName("bid1Price")]
         public string? Bid1Price { get; set; }
 
-        [JsonProperty("ask1Price")]
+        [JsonPropertyName("ask1Price")]
         public string? Ask1Price { get; set; }
 
-        [JsonProperty("bid1Size")]
+        [JsonPropertyName("bid1Size")]
         public string? Bid1Size { get; set; }
     }
 }

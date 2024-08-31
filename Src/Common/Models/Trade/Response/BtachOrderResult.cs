@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace bybit.net.api.Models.Trade.Response
+﻿namespace bybit.net.api.Models.Trade.Response
 {
     public class BatchOrderResult
     {

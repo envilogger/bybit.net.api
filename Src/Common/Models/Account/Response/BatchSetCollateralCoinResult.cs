@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace bybit.net.api.Models.Account.Response
 {
     public class BatchSetCollateralCoinResult
     {
-        [JsonProperty("list")]
+        [JsonPropertyName("list")]
         public List<CollateralCoinEntry>? collateralCoinEntries { get; set; }
     }
 }
