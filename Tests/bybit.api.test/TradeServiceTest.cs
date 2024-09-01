@@ -3,7 +3,7 @@ using bybit.net.api.ApiServiceImp;
 using bybit.net.api.Models;
 using bybit.net.api.Models.Trade;
 using bybit.net.api.Models.Trade.Response;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Xunit;
 
 namespace bybit.api.test
@@ -28,7 +28,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(orderInfoString))
             {
                 Console.WriteLine(orderInfoString);
-                OrderResult? orderInfo = JsonConvert.DeserializeObject<OrderResult>(orderInfoString);
+                OrderResult? orderInfo = JsonSerializer.Deserialize<OrderResult>(orderInfoString);
                 Assert.Equal(0, orderInfo?.RetCode);
                 Assert.Equal("OK", orderInfo?.RetMsg);
                 Assert.NotNull(orderInfo?.Result?.OrderId);
@@ -47,7 +47,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(orderInfoString))
             {
                 Console.WriteLine(orderInfoString);
-                BatchOrderResult? orderInfo = JsonConvert.DeserializeObject<BatchOrderResult>(orderInfoString);
+                BatchOrderResult? orderInfo = JsonSerializer.Deserialize<BatchOrderResult>(orderInfoString);
                 Assert.Equal(0, orderInfo?.RetCode);
                 Assert.Equal("OK", orderInfo?.RetMsg);
                 Assert.NotNull(orderInfo?.Result?.List?[0].OrderId);
@@ -63,7 +63,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(orderInfoString))
             {
                 Console.WriteLine(orderInfoString);
-                BatchOrderResult? orderInfo = JsonConvert.DeserializeObject<BatchOrderResult>(orderInfoString);
+                BatchOrderResult? orderInfo = JsonSerializer.Deserialize<BatchOrderResult>(orderInfoString);
                 Assert.Equal(0, orderInfo?.RetCode);
                 Assert.Equal("OK", orderInfo?.RetMsg);
                 Assert.NotNull(orderInfo?.Result?.List?[0].OrderId);
@@ -80,7 +80,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(orderInfoString))
             {
                 Console.WriteLine(orderInfoString);
-                BatchOrderResult? orderInfo = JsonConvert.DeserializeObject<BatchOrderResult>(orderInfoString);
+                BatchOrderResult? orderInfo = JsonSerializer.Deserialize<BatchOrderResult>(orderInfoString);
                 Assert.Equal(0, orderInfo?.RetCode);
                 Assert.Equal("OK", orderInfo?.RetMsg);
                 Assert.NotNull(orderInfo?.Result?.List?[0].OrderId);
@@ -94,7 +94,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(orderInfoString))
             {
                 Console.WriteLine(orderInfoString);
-                OrderResult? orderInfo = JsonConvert.DeserializeObject<OrderResult>(orderInfoString);
+                OrderResult? orderInfo = JsonSerializer.Deserialize<OrderResult>(orderInfoString);
                 Assert.Equal(0, orderInfo?.RetCode);
                 Assert.Equal("OK", orderInfo?.RetMsg);
             }
@@ -109,7 +109,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(orderInfoString))
             {
                 Console.WriteLine(orderInfoString);
-                OrderResult? orderInfo = JsonConvert.DeserializeObject<OrderResult>(orderInfoString);
+                OrderResult? orderInfo = JsonSerializer.Deserialize<OrderResult>(orderInfoString);
                 Assert.Equal(0, orderInfo?.RetCode);
                 Assert.Equal("OK", orderInfo?.RetMsg);
             }
@@ -122,7 +122,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(orderInfoString))
             {
                 Console.WriteLine(orderInfoString);
-                OrderResult? orderInfo = JsonConvert.DeserializeObject<OrderResult>(orderInfoString);
+                OrderResult? orderInfo = JsonSerializer.Deserialize<OrderResult>(orderInfoString);
                 Assert.Equal(0, orderInfo?.RetCode);
                 Assert.Equal("OK", orderInfo?.RetMsg);
             }
@@ -137,7 +137,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(orderInfoString))
             {
                 Console.WriteLine(orderInfoString);
-                OrderResult? orderInfo = JsonConvert.DeserializeObject<OrderResult>(orderInfoString);
+                OrderResult? orderInfo = JsonSerializer.Deserialize<OrderResult>(orderInfoString);
                 Assert.Equal(0, orderInfo?.RetCode);
                 Assert.Equal("OK", orderInfo?.RetMsg);
             }
@@ -150,7 +150,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(orderInfoString))
             {
                 Console.WriteLine(orderInfoString);
-                OrderResult? orderInfo = JsonConvert.DeserializeObject<OrderResult>(orderInfoString);
+                OrderResult? orderInfo = JsonSerializer.Deserialize<OrderResult>(orderInfoString);
                 Assert.Equal(0, orderInfo?.RetCode);
                 Assert.Equal("OK", orderInfo?.RetMsg);
             }

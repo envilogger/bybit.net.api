@@ -1,7 +1,7 @@
-﻿using bybit.net.api.ApiServiceImp;
+﻿using System.Text.Json;
+using bybit.net.api.ApiServiceImp;
 using bybit.net.api.Models;
 using bybit.net.api;
-using Newtonsoft.Json;
 using Xunit;
 using bybit.net.api.Models.Lending;
 using bybit.net.api.Models.Account.Response;
@@ -43,7 +43,7 @@ namespace bybit.api.test
             if(!string.IsNullOrEmpty(collateralInfoString))
             {
                 await Console.Out.WriteLineAsync(collateralInfoString);
-                var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<BatchSetCollateralCoinResult>>(collateralInfoString);
+                var generalResponse = JsonSerializer.Deserialize<GeneralResponse<BatchSetCollateralCoinResult>>(collateralInfoString);
                 var collateralInfo = generalResponse?.Result;
                 Assert.Equal(0, generalResponse?.RetCode);
                 Assert.Equal("SUCCESS", generalResponse?.RetMsg);
@@ -60,7 +60,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(collateralInfoString))
             {
                 await Console.Out.WriteLineAsync(collateralInfoString);
-                var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<BatchSetCollateralCoinResult>>(collateralInfoString);
+                var generalResponse = JsonSerializer.Deserialize<GeneralResponse<BatchSetCollateralCoinResult>>(collateralInfoString);
                 var collateralInfo = generalResponse?.Result;
                 Assert.Equal(0, generalResponse?.RetCode);
                 Assert.Equal("SUCCESS", generalResponse?.RetMsg);

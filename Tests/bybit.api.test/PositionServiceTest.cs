@@ -2,12 +2,7 @@
 using Xunit;
 using bybit.net.api.ApiServiceImp;
 using bybit.net.api;
-using bybit.net.api.Models.Account.Response;
-using bybit.net.api.Models.Account;
-using bybit.net.api.Models.Lending;
-using Newtonsoft.Json;
 using bybit.net.api.Models.Position;
-using System.Collections.Generic;
 
 namespace bybit.api.test
 {

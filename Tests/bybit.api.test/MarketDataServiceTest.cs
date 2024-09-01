@@ -1,7 +1,7 @@
 ﻿using bybit.net.api.ApiServiceImp;
 using bybit.net.api.Models.Market;
 using bybit.net.api.Models;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Xunit;
 using bybit.net.api;
 
@@ -32,7 +32,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(tickersInfoString))
             {
                 Console.WriteLine(tickersInfoString);
-                var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<MarketTickerResult>>(tickersInfoString);
+                var generalResponse = JsonSerializer.Deserialize<GeneralResponse<MarketTickerResult>>(tickersInfoString);
                 var tickersInfo = generalResponse?.Result;
 
                 Assert.Equal(0, generalResponse?.RetCode);
@@ -50,7 +50,7 @@ namespace bybit.api.test
             if (!string.IsNullOrEmpty(fundingInfoString))
             {
                 Console.WriteLine(fundingInfoString);
-                var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<FundingRateResult>>(fundingInfoString);
+                var generalResponse = JsonSerializer.Deserialize<GeneralResponse<FundingRateResult>>(fundingInfoString);
                 var fundingInfo = generalResponse?.Result;
 
                 Assert.Equal(0, generalResponse?.RetCode);
