@@ -1,7 +1,11 @@
 ﻿using System.Globalization;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Web;
+using bybit.net.api.Json;
+using bybit.net.api.Models;
+using bybit.net.api.Models.Market;
 
 namespace bybit.net.api
 {
@@ -37,6 +41,7 @@ namespace bybit.net.api
         }
 
         #region public exposed methods
+
         /// <summary>
         /// Sends an asynchronous public request to Bybit API.
         /// </summary>
@@ -44,8 +49,9 @@ namespace bybit.net.api
         /// <param name="requestUri">The URI of the endpoint to request.</param>
         /// <param name="httpMethod">The HTTP method (GET, POST, etc.) of the request.</param>
         /// <param name="query">Optional dictionary containing query parameters for the request.</param>
+        /// <param name="jsonTypeInfo">Optional json serialization options</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the deserialized response object of type T.</returns>
-        protected async Task<T?> SendPublicAsync<T>(string requestUri, HttpMethod httpMethod, Dictionary<string, object>? query = null)
+        protected async Task<T?> SendPublicAsync<T>(string requestUri, HttpMethod httpMethod, Dictionary<string, object>? query = null, JsonTypeInfo<T>? jsonTypeInfo = null)
         {
             string? content = null;
             if (query is not null)
@@ -60,7 +66,7 @@ namespace bybit.net.api
                     content = JsonSerializer.Serialize(query);
                 }
             }
-            return await SendAsync<T>(requestUri, httpMethod, null, content);
+            return await SendAsync<T>(requestUri, httpMethod, null, content, jsonTypeInfo);
         }
 
         /// <summary>
@@ -142,70 +148,77 @@ namespace bybit.net.api
         /// <param name="httpMethod">The HTTP method (GET, POST, etc.) of the request.</param>
         /// <param name="signature">Optional signature for authentication.</param>
         /// <param name="content">Optional content to include in the request body.</param>
+        /// <param name="jsonTypeInfo">Optional json serialization options</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the deserialized response object of type T or throws an exception if there's an issue.</returns>
-        private async Task<T?> SendAsync<T>(string requestUri, HttpMethod httpMethod, string? signature = null, string? content = null)
+        private async Task<T?> SendAsync<T>(string requestUri, HttpMethod httpMethod, string? signature = null, string? content = null, JsonTypeInfo<T>? jsonTypeInfo = null)
         {
             using HttpRequestMessage request = BuildHttpRequest(requestUri, httpMethod, signature, content);
 
             LogHttpRequestHeader(request);
 
-            HttpResponseMessage response = await this.httpClient.SendAsync(request);
+            HttpResponseMessage response = await httpClient.SendAsync(request);
 
             LogHttpResponseHeader(response);
 
             using HttpContent responseContent = response.Content;
-            string contentString = await responseContent.ReadAsStringAsync();
+            Stream contentStream = await responseContent.ReadAsStreamAsync();
+            
             if (response.IsSuccessStatusCode)
             {
                 if (typeof(T) == typeof(string))
                 {
-                    return (T)(object)contentString;
+                    using StreamReader streamReader = new StreamReader(contentStream);
+                    return await streamReader.ReadToEndAsync().ContinueWith(t => (T)(object)t.Result);
                 }
-                else
-                {
-                    try
-                    {
-                        return JsonSerializer.Deserialize<T>(contentString);
-                    }
-                    catch (JsonException ex)
-                    {
-                        var clientException = new BybitClientException($"Failed to map server response from '{requestUri}' to given type", -1, ex)
-                        {
-                            StatusCode = (int)response.StatusCode,
-                            Headers = response.Headers.ToDictionary(a => a.Key, a => a.Value)
-                        };
 
-                        throw clientException;
+                try
+                {
+                    if(jsonTypeInfo == null) 
+                    {
+                        return await JsonSerializer.DeserializeAsync<T>(contentStream);
                     }
+                    
+                    return await JsonSerializer.DeserializeAsync<T>(contentStream, jsonTypeInfo);
+                }
+                catch (JsonException ex)
+                {
+                    var clientException = new BybitClientException($"Failed to map server response from '{requestUri}' to given type", -1, ex)
+                    {
+                        StatusCode = (int)response.StatusCode,
+                        Headers = response.Headers.ToDictionary(a => a.Key, a => a.Value)
+                    };
+
+                    throw clientException;
+                }
+            }
+            
+            using StreamReader contentStreamReader = new StreamReader(contentStream);
+            string contentString = await contentStreamReader.ReadToEndAsync();
+
+            BybitHttpException? httpException;
+            int statusCode = (int)response.StatusCode;
+            if (!string.IsNullOrWhiteSpace(contentString))
+            {
+                try
+                {
+                    httpException = JsonSerializer.Deserialize<BybitHttpException>(contentString);
+                }
+                catch (JsonException ex)
+                {
+                    httpException = new BybitClientException(contentString, -1, ex);
                 }
             }
             else
             {
-                BybitHttpException? httpException;
-                int statusCode = (int)response.StatusCode;
-                if (!string.IsNullOrWhiteSpace(contentString))
-                {
-                    try
-                    {
-                        httpException = JsonSerializer.Deserialize<BybitHttpException>(contentString);
-                    }
-                    catch (JsonException ex)
-                    {
-                        httpException = new BybitClientException(contentString, -1, ex);
-                    }
-                }
-                else
-                {
-                    httpException = statusCode >= 400 && statusCode < 500 ? new BybitClientException("Unsuccessful response with no content", -1) : new BybitClientException(contentString);
-                }
+                httpException = statusCode >= 400 && statusCode < 500 ? new BybitClientException("Unsuccessful response with no content", -1) : new BybitClientException(contentString);
+            }
 
-                if (httpException != null) // Check for null before dereferencing
-                {
-                    httpException.StatusCode = statusCode;
-                    httpException.Headers = response.Headers.ToDictionary(a => a.Key, a => a.Value);
+            if (httpException != null) // Check for null before dereferencing
+            {
+                httpException.StatusCode = statusCode;
+                httpException.Headers = response.Headers.ToDictionary(a => a.Key, a => a.Value);
 
-                    throw httpException;
-                }
+                throw httpException;
             }
             return default;
         }
