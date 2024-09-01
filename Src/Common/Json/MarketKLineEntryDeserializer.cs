@@ -24,7 +24,6 @@ public class MarketKLineEntryDeserializer : JsonConverter<MarketKlineEntry>
   /// <exception cref="JsonException">Throws in case reader does not point at an array</exception>
   public override MarketKlineEntry Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
   {
-    reader.Read();
     if(reader.TokenType != JsonTokenType.StartArray)
       throw new JsonException("Expected an array.");
 
@@ -44,10 +43,16 @@ public class MarketKLineEntryDeserializer : JsonConverter<MarketKlineEntry>
     decimal closePrice = reader.GetDecimalFromString();
     
     reader.Read();
-    long volume = reader.GetInt64FromString();
+    decimal volume = reader.GetDecimalFromString();
     
     reader.Read();
     decimal turnover = reader.GetDecimalFromString();
+
+    reader.Read();
+    if(reader.TokenType != JsonTokenType.EndArray) 
+    {
+      throw new JsonException("Expected an end of an array.");
+    }
 
     return new MarketKlineEntry
     {

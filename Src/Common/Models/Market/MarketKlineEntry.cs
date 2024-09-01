@@ -16,7 +16,7 @@ namespace bybit.net.api.Models.Market
 
         public decimal ClosePrice { get; set; }
 
-        public long Volume { get; set; }
+        public decimal Volume { get; set; }
 
         public decimal Turnover { get; set; }
     }
