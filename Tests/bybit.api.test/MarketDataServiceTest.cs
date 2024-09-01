@@ -14,17 +14,13 @@ namespace bybit.api.test
         [Fact]
         public async Task CheckMarketKline_ResponseAsync()
         {
-            var klineInfoString = await marketDataService.GetMarketKline(category: Category.SPOT, symbol: "BTCUSDT", interval: MarketInterval.OneHour, start: 1693785600000, limit: 2);
-            if (!string.IsNullOrEmpty(klineInfoString))
-            {
-                Console.WriteLine(klineInfoString);
-                var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<MarketKLineResult>>(klineInfoString);
-                var klineInfo = generalResponse?.Result;
+            GeneralResponse<MarketKLineResult>? klineInfoResponse = await marketDataService.GetMarketKline(category: Category.SPOT, symbol: "BTCUSDT", interval: MarketInterval.OneHour, start: 1693785600000, limit: 2);
+            Assert.NotNull(klineInfoResponse);
+            MarketKLineResult? klineInfo = klineInfoResponse.Result;
 
-                Assert.Equal(0, generalResponse?.RetCode);
-                Assert.Equal("OK", generalResponse?.RetMsg);
-                Assert.NotNull(klineInfo?.MarketKlineEntries);
-            }
+            Assert.Equal(0, klineInfoResponse.RetCode);
+            Assert.Equal("OK", klineInfoResponse.RetMsg);
+            Assert.NotNull(klineInfo?.MarketKlineEntries);
         }
         #endregion
 

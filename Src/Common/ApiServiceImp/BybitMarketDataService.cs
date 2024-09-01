@@ -1,4 +1,5 @@
-﻿using bybit.net.api.Models;
+﻿using bybit.net.api.Json;
+using bybit.net.api.Models;
 using bybit.net.api.Models.Market;
 using bybit.net.api.Models.Trade;
 using bybit.net.api.Services;
@@ -46,7 +47,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="end"></param>
         /// <param name="limit"></param>
         /// <returns>Market kline</returns>
-        public async Task<string?> GetMarketKline(Category category, string symbol, MarketInterval interval, long? start = null, long? end = null, int? limit = null)
+        public Task<GeneralResponse<MarketKLineResult>?> GetMarketKline(Category category, string symbol, MarketInterval interval, long? start = null, long? end = null, int? limit = null)
         {
             var query = new Dictionary<string, object>
                         {
@@ -58,12 +59,11 @@ namespace bybit.net.api.ApiServiceImp
                 ("end", end),
                 ("limit", limit)
             );
-            var result = await SendPublicAsync<string>(
+            return SendPublicAsync<GeneralResponse<MarketKLineResult>>(
                 MAKRKET_KLINE,
                 HttpMethod.Get,
-                query: query);
-
-            return result;
+                query: query,
+                SourceGenerationContext.Default.GeneralResponseMarketKLineResult);
         }
 
         private const string MARK_PRICE_KLINE = "/v5/market/mark-price-kline";
